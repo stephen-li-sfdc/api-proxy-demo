@@ -1,7 +1,7 @@
 -- provider_key: a2303268b90e273324f1e915a7772175 --
 -- https://api-2445581533239.staging.apicast.io:443 https://onews-3scale-test.herokuapp.com:443 2555417735130 onews-3scale-test.herokuapp.com --
 -- -*- mode: lua; -*-
--- Generated on: 2016-09-22 19:58:09 +0000 --
+-- Generated on: 2016-09-23 02:19:09 +0000 --
 -- Version:
 -- Error Messages per service
 
@@ -44,17 +44,7 @@ local _M = {
   rules = {
         {
       method = 'GET',
-      pattern = '/api/fda-udi',
-      parameters = {  },
-      querystring_params = function(args)
-        return true
-      end,
-      system_name = 'hits',
-      delta = 1
-    },
-    {
-      method = 'GET',
-      pattern = '/api/fda-udi/responses',
+      pattern = '/i',
       parameters = {  },
       querystring_params = function(args)
         return true
