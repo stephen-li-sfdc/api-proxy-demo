@@ -54,7 +54,7 @@ local _M = {
   secret_token = 'Shared_secret_sent_from_proxy_to_API_backend_ecf797ba4dda70a2',
   get_credentials = function(service, params)
     return (
-        (params.app_id and params.app_key)
+        (params.app_id)
     ) or error_no_credentials(service)
   end,
   extract_usage = function (service, request)
