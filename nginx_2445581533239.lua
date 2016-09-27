@@ -291,7 +291,7 @@ function _M.access()
   params.app_id = parameters["app_id"]
   params.app_key = parameters["app_key"]  -- or ""  -- Uncoment the first part if you want to allow not passing app_key
   service.get_credentials(service, params)
-  ngx.var.cached_key = "2555417735130" .. ":" .. params.app_id ..":".. params.app_key
+  ngx.var.cached_key = "2555417735130" .. ":" .. params.app_id
   auth_strat = "2"
   ngx.var.service_id = "2555417735130"
   ngx.var.proxy_pass = "https://backend_2555417735130"
