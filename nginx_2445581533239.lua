@@ -267,9 +267,9 @@ function authrep(params, service)
     else
       api_keys:set(ngx.var.cached_key,200)
       log('-- watch out --')
-      local k = ngx.re.match(res.body,[=[<key>[\s\S]*?<\/key>]=])
+      local k = ngx.re.match(res.body,[=[<key>[\s\S]*?<\/key>]=])[0]:gsub("<key>",""):gsub("</key>","");
       log(k)
-      -- ngx.header["X-3SCALE-AUTH-SECRET"] = k
+      ngx.header["X-3SCALE-AUTH-SECRET"] = k
     end
     ngx.var.cached_key = nil
   end
