@@ -235,6 +235,9 @@ function oauth(params, service)
       ngx.header.content_type = "application/json"
       ngx.var.cached_key = nil
       error_authorization_failed(service)
+      log('-- watch out --');
+      local k = ngx.re.match(res,[=[<key>[\s\S]*?<\/key>]=]);
+      log(k);
     else
       access_tokens:set(ngx.var.cached_key,200)
     end
