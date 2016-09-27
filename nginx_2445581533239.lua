@@ -213,12 +213,6 @@ function get_debug_value()
 end
 
 function _M.authorize(auth_strat, params, service)
-  -- MY
-  log('--_M.authorize: auth_strat:');
-  log(auth_strat);
-  log('-- _M.authorize: params:');
-  log(params);
-  -- END MY
   if auth_strat == 'oauth' then
     oauth(params, service)
   else
@@ -253,22 +247,13 @@ function authrep(params, service)
   ngx.var.cached_key = ngx.var.cached_key .. ":" .. ngx.var.usage
   local api_keys = ngx.shared.api_keys
   local is_known = api_keys:get(ngx.var.cached_key)
-  
-  -- MY
-  log('--authrep: api_keys:');
-  log(api_keys);
-  log('--authrep: is_known:');
-  log(is_known);
-  -- END MY
 
   if is_known ~= 200 then
     local res = ngx.location.capture("/threescale_authrep", { share_all_vars = true })
     
     -- MY
-  	log('--authrep: api_keys:');
-  	log(api_keys);
-	log('--authrep: is_known:');
-  	log(is_known);
+  	log('--res:');
+  	log(res);
   	-- END MY
 
     -- IN HERE YOU DEFINE THE ERROR IF CREDENTIALS ARE PASSED, BUT THEY ARE NOT VALID
