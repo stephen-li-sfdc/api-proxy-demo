@@ -266,7 +266,10 @@ function authrep(params, service)
       error_authorization_failed(service)
     else
       api_keys:set(ngx.var.cached_key,200)
-      log(res.body)
+      log('-- watch out --')
+      local k = ngx.re.match(res.body,[=[<key>[\s\S]*?<\/key>]=])
+      log(k)
+      -- ngx.header["X-3SCALE-AUTH-SECRET"] = k
     end
     ngx.var.cached_key = nil
   end
