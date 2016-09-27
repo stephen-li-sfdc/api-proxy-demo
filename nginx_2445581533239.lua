@@ -6,29 +6,32 @@
 -- Error Messages per service
 
 -- My Own Logging Methods --
--- Extend tostring to work better on tables
--- make it output in {a,b,c...;x1=y1,x2=y2...} format; use nexti
--- only output the LH part if there is a table.n and members 1..n
---   x: object to convert to string
--- returns
---   s: string representation
-function tostring(x)
-  local s
-  if type(x) == "table" then
-    s = "{"
-    local i, v = next(x)
-    while i do
-      s = s .. tostring(i) .. "=" .. tostring(v)
-      i, v = next(x, i)
-      if i then s = s .. "," end
-    end
-    return s .. "}"
-  else return %tostring(x)
-  end
+function show_table(a)
+   for k,v in pairs(a) do
+      local msg = ""
+      msg = msg.. k
+     if type(v) == "string" then
+	 msg = msg.. " => " .. v
+      end
+      ngx.log(ngx.STDERR,msg)
+   end
+end
+
+function log_message(str)
+   ngx.log(ngx.STDERR, str)
 end
 
 function log(content)
-   ngx.log(ngx.STDERR, str)
+   if type(content) == "table" then
+      show_table(content)
+   else
+      log_message(content)
+   end
+   newline()
+end
+
+function newline()
+   ngx.log(ngx.STDERR,"  ---   ")
 end
 -- END My Own Logging Methods --
 -- Sample NGINX debug statement: ngx.log(ngx.STDERR, 'your message here') --
@@ -211,9 +214,12 @@ end
 
 function _M.authorize(auth_strat, params, service)
   -- MY
-  log('--_M.authorize: auth_strat:'..tostring(auth_strat));
-  log('-- _M.authorize: params:'..tostring(params));
-  log('_M.authorize: service'..tostring(service));
+  log('--_M.authorize: auth_strat:');
+  log(auth_strat);
+  log('-- _M.authorize: params:');
+  log(params);
+  log('_M.authorize: service');
+  log(service);
   -- END MY
   if auth_strat == 'oauth' then
     oauth(params, service)
@@ -251,15 +257,20 @@ function authrep(params, service)
   local is_known = api_keys:get(ngx.var.cached_key)
   
   -- MY
-  log('--authrep: api_keys:'..tostring(api_keys));
-  log('--authrep: is_known:'..tostring(is_known));
+  log('--authrep: api_keys:');
+  log(api_keys);
+  log('--authrep: is_known:');
+  log(is_known);
   -- END MY
 
   if is_known ~= 200 then
     local res = ngx.location.capture("/threescale_authrep", { share_all_vars = true })
     
     -- MY
-  	log('--threescale_authrep: res:'..res);
+  	log('--authrep: api_keys:');
+  	log(api_keys);
+	log('--authrep: is_known:');
+  	log(is_known);
   	-- END MY
 
     -- IN HERE YOU DEFINE THE ERROR IF CREDENTIALS ARE PASSED, BUT THEY ARE NOT VALID
