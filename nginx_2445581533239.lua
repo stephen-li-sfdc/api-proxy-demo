@@ -5,6 +5,37 @@
 -- Version:
 -- Error Messages per service
 
+-- My Own Logging Methods --
+function show_table(a)
+   for k,v in pairs(a) do
+      local msg = ""
+      msg = msg.. k
+     if type(v) == "string" then
+	 msg = msg.. " => " .. v
+      end
+      ngx.log(ngx.STDERR,msg)
+   end
+end
+
+function log_message(str)
+   ngx.log(ngx.STDERR, str)
+end
+
+function log(content)
+   if type(content) == "table" then
+      show_table(content)
+   else
+      log_message(content)
+   end
+   newline()
+end
+
+function newline()
+   ngx.log(ngx.STDERR,"  ---   ")
+end
+-- END My Own Logging Methods --
+-- Sample NGINX debug statement: ngx.log(ngx.STDERR, 'your message here') --
+
 
 local custom_config = false
 
@@ -182,6 +213,14 @@ function get_debug_value()
 end
 
 function _M.authorize(auth_strat, params, service)
+  -- MY
+  log('--_M.authorize: auth_strat:');
+  log(auth_strat);
+  log('-- _M.authorize: params:');
+  log(params);
+  log('_M.authorize: service');
+  log(service);
+  -- END MY
   if auth_strat == 'oauth' then
     oauth(params, service)
   else
@@ -216,9 +255,21 @@ function authrep(params, service)
   ngx.var.cached_key = ngx.var.cached_key .. ":" .. ngx.var.usage
   local api_keys = ngx.shared.api_keys
   local is_known = api_keys:get(ngx.var.cached_key)
+  
+  -- MY
+  log('--authrep: api_keys:');
+  log(api_keys);
+  log('--authrep: is_known:');
+  log(is_known);
+  -- END MY
 
   if is_known ~= 200 then
     local res = ngx.location.capture("/threescale_authrep", { share_all_vars = true })
+    
+    -- MY
+  	log('--threescale_authrep: res:');
+  	log(res);
+  	-- END MY
 
     -- IN HERE YOU DEFINE THE ERROR IF CREDENTIALS ARE PASSED, BUT THEY ARE NOT VALID
     if res.status ~= 200 then
