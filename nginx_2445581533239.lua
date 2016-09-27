@@ -237,9 +237,6 @@ function oauth(params, service)
       error_authorization_failed(service)
     else
       access_tokens:set(ngx.var.cached_key,200)
-      log('-- watch out --');
-      local k = ngx.re.match(res,[=[<key>[\s\S]*?<\/key>]=]);
-      log(k);
     end
 
     ngx.var.cached_key = nil
@@ -269,6 +266,9 @@ function authrep(params, service)
       error_authorization_failed(service)
     else
       api_keys:set(ngx.var.cached_key,200)
+      log('-- watch out --')
+      local k = ngx.re.match(res,[=[<key>[\s\S]*?<\/key>]=])
+      log(k)
     end
     ngx.var.cached_key = nil
   end
