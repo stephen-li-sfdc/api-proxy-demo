@@ -251,7 +251,7 @@ function authrep(params, service)
   local is_known = api_keys:get(ngx.var.cached_key)
   
   -- MY
-  log('--authrep: api_keys:'..tostrign(api_keys));
+  log('--authrep: api_keys:'..tostring(api_keys));
   log('--authrep: is_known:'..tostring(is_known));
   -- END MY
 
