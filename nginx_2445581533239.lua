@@ -218,8 +218,6 @@ function _M.authorize(auth_strat, params, service)
   log(auth_strat);
   log('-- _M.authorize: params:');
   log(params);
-  log('_M.authorize: service');
-  log(service);
   -- END MY
   if auth_strat == 'oauth' then
     oauth(params, service)
