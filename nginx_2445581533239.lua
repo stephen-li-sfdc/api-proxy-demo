@@ -1,7 +1,7 @@
 -- provider_key: a2303268b90e273324f1e915a7772175 --
 -- https://api-2445581533239.staging.apicast.io:443 https://onews-3scale-test.herokuapp.com:443 2555417735130 onews-3scale-test.herokuapp.com --
 -- -*- mode: lua; -*-
--- Generated on: 2016-09-23 02:19:09 +0000 --
+-- Generated on: 2016-09-27 19:31:21 +0000 --
 -- Version:
 -- Error Messages per service
 
@@ -23,7 +23,7 @@ local _M = {
   secret_token = 'Shared_secret_sent_from_proxy_to_API_backend_ecf797ba4dda70a2',
   get_credentials = function(service, params)
     return (
-        (params.access_token or params.authorization)
+        (params.app_id and params.app_key)
     ) or error_no_credentials(service)
   end,
   extract_usage = function (service, request)
@@ -252,11 +252,11 @@ function _M.access()
   local parameters = get_auth_params("not_headers", string.split(ngx.var.request, " ")[1] )
   service = _M.services['2555417735130'] --
   ngx.var.secret_token = service.secret_token
-  ngx.var.access_token = parameters.access_token
-  params.access_token = parameters.access_token
-  service.get_credentials(service , params)
-  ngx.var.cached_key = "2555417735130" .. ":" .. params.access_token
-  auth_strat = "oauth"
+  params.app_id = parameters["app_id"]
+  params.app_key = parameters["app_key"]  -- or ""  -- Uncoment the first part if you want to allow not passing app_key
+  service.get_credentials(service, params)
+  ngx.var.cached_key = "2555417735130" .. ":" .. params.app_id ..":".. params.app_key
+  auth_strat = "2"
   ngx.var.service_id = "2555417735130"
   ngx.var.proxy_pass = "https://backend_2555417735130"
   usage, matched_patterns = service:extract_usage(ngx.var.request)
